@@ -3,7 +3,7 @@ import 'package:flutter_grade_calculator/main_page.dart';
 import 'constants.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Constants.mainColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }
