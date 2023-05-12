@@ -9,6 +9,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +20,69 @@ class _MainPageState extends State<MainPage> {
           style: Constants.textStyle,
         ),
       ),
-      body: Text('Hello'),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: createForm(),
+                  color: Colors.pink.shade300,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Text(
+                    'Average',
+                  ),
+                  color: Colors.pink.shade100,
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Container(
+              child: Text(
+                'For List',
+              ),
+              color: Colors.pink.shade600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget createForm() {
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          createTextFormField(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Icon(Icons.grade),
+              Icon(Icons.grade),
+              Icon(Icons.grade),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget createTextFormField() {
+    return TextFormField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        hintText: 'Lesson',
+        filled: true,
+        fillColor: Constants.mainColor.shade100,
+      ),
     );
   }
 }
