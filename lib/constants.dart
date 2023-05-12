@@ -7,5 +7,16 @@ class Constants {
   static final TextStyle textStyle = GoogleFonts.lato(
     fontSize: 20,
     color: mainColor,
+    fontWeight: FontWeight.w700,
+  );
+  static final TextStyle lessonStyle = GoogleFonts.lato(
+    fontSize: 14,
+    color: mainColor,
+    fontWeight: FontWeight.w500,
+  );
+  static final TextStyle averageStyle = GoogleFonts.lato(
+    fontSize: 30,
+    color: mainColor,
+    fontWeight: FontWeight.w700,
   );
 }

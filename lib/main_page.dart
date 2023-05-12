@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_grade_calculator/constants.dart';
+import 'package:flutter_grade_calculator/show_average.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -34,11 +35,9 @@ class _MainPageState extends State<MainPage> {
               ),
               Expanded(
                 flex: 1,
-                child: Container(
-                  child: Text(
-                    'Average',
-                  ),
-                  color: Colors.pink.shade100,
+                child: ShowAverage(
+                  average: 2.5,
+                  numberOfLesson: 0,
                 ),
               ),
             ],
