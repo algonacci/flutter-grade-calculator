@@ -26,7 +26,7 @@ class ShowAverage extends StatelessWidget {
           style: Constants.averageStyle,
         ),
         Text(
-          '$average',
+          'Average',
           style: Constants.lessonStyle,
         ),
       ],

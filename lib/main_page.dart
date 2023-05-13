@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_grade_calculator/constants.dart';
 import 'package:flutter_grade_calculator/data.dart';
+import 'package:flutter_grade_calculator/lesson_list.dart';
+import 'package:flutter_grade_calculator/model/lesson.dart';
 import 'package:flutter_grade_calculator/show_average.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,6 +15,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   var formKey = GlobalKey<FormState>();
   double? selectedValue;
+  double? selectedCredit;
+  String? incomingLessonName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,25 +35,26 @@ class _MainPageState extends State<MainPage> {
               Expanded(
                 flex: 2,
                 child: Container(
-                  color: Colors.pink.shade300,
+                  // color: Colors.pink.shade300,
                   child: createForm(),
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 1,
                 child: ShowAverage(
-                  average: 2.5,
-                  numberOfLesson: 0,
+                  average: DataHelper.calculateAverage(),
+                  numberOfLesson: DataHelper.allAddedLessons.length,
                 ),
               ),
             ],
           ),
           Expanded(
-            child: Container(
-              color: Colors.pink.shade600,
-              child: const Text(
-                'For List',
-              ),
+            child: LessonList(
+              onDismiss: (index) {
+                DataHelper.allAddedLessons.removeAt(index);
+                setState(() {});
+                print('Deleted element is $index');
+              },
             ),
           ),
         ],
@@ -62,11 +67,38 @@ class _MainPageState extends State<MainPage> {
       key: formKey,
       child: Column(
         children: [
-          createTextFormField(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: createTextFormField(),
+          ),
+          const SizedBox(
+            height: 7,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [createLetterGrade()],
-          )
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: createLetterGrade(),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: createCredits(),
+                ),
+              ),
+              IconButton(
+                onPressed: addLessonAndCalculate(),
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  color: Constants.mainColor,
+                  size: 50,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -74,6 +106,18 @@ class _MainPageState extends State<MainPage> {
 
   Widget createTextFormField() {
     return TextFormField(
+      onSaved: (value) {
+        setState(() {
+          incomingLessonName = value!;
+        });
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please Enter a Lesson';
+        } else {
+          return null;
+        }
+      },
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         hintText: 'Lesson',
@@ -85,6 +129,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget createLetterGrade() {
     return Container(
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Constants.mainColor.shade100.withOpacity(0.5),
         borderRadius: Constants.radius,
@@ -99,5 +144,41 @@ class _MainPageState extends State<MainPage> {
         items: DataHelper.allLessonsLetter(),
       ),
     );
+  }
+
+  Widget createCredits() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Constants.mainColor.shade100.withOpacity(0.5),
+        borderRadius: Constants.radius,
+      ),
+      child: DropdownButton<double>(
+        value: selectedCredit,
+        onChanged: (value) {
+          setState(() {
+            selectedCredit = value!;
+          });
+        },
+        items: DataHelper.allCreditsList(),
+      ),
+    );
+  }
+
+  addLessonAndCalculate() {
+    if (formKey.currentState != null && formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+
+      if (selectedValue != null &&
+          selectedCredit != null &&
+          incomingLessonName != null) {
+        var addLesson = Lesson(
+          name: incomingLessonName!,
+          letterGrade: selectedValue!,
+          credit: selectedCredit!,
+        );
+        DataHelper.addLesson(addLesson);
+        DataHelper.calculateAverage();
+      }
+    }
   }
 }

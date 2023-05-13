@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'model/lesson.dart';
+
 class DataHelper {
+  static List<Lesson> allAddedLessons = [];
+  static addLesson(Lesson lesson) {
+    allAddedLessons.add(lesson);
+  }
+
+  static calculateAverage() {
+    double totalGrade = 0;
+    double totalCredit = 0;
+
+    allAddedLessons.forEach((element) {
+      totalGrade = totalGrade + (element.credit * element.letterGrade);
+      totalCredit = totalCredit + element.credit;
+    });
+
+    return totalGrade / totalCredit;
+  }
+
   static List<String> letterGrade() {
     return ['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'FD', 'FF'];
   }
@@ -33,6 +52,19 @@ class DataHelper {
   static List<DropdownMenuItem<double>> allLessonsLetter() {
     return letterGrade()
         .map((e) => DropdownMenuItem(value: numberGrade(e), child: Text(e)))
+        .toList();
+  }
+
+  static List<int> allCredits() {
+    return List.generate(15, (index) => index + 1).toList();
+  }
+
+  static List<DropdownMenuItem<double>> allCreditsList() {
+    return allCredits()
+        .map((e) => DropdownMenuItem(
+              value: e.toDouble(),
+              child: Text(e.toString()),
+            ))
         .toList();
   }
 }
